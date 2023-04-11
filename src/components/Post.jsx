@@ -18,7 +18,6 @@ export function Post({ author, published, content }) {
 
     const [newCommentText, setNewCommentText] = useState('')
 
-
     // formatando a data e hora
     const publishedDateFormatted = format(published, "d 'de' LLLL 'de' y 'às' HH:mm",{
         locale: ptBr,
@@ -39,18 +38,25 @@ export function Post({ author, published, content }) {
     }
 
     function userNewCommentChange() {
-        setNewCommentText(event.target.value)
+        event.target.setCustomValidity('');
+        setNewCommentText(event.target.value);
+    }
+
+    function userNewCommentInvalid() {
+        event.target.setCustomValidity('Esse campo é obrigatório');
     }
 
     function deleteComment(commentToDelete) {
         // imutabilitadade -> as variáveis não sofrem mutação, nós criamos um novo valor (um novo espaço na memória)
-        // 
+         
         const commentsWithoutDeletedOne = comments.filter(comment => {
             return comment !== commentToDelete;
         })
 
         setComments(commentsWithoutDeletedOne);
     }
+
+    const isNewCommentEmpty = newCommentText === '';
 
     return (
     <article className={styles.post}>
@@ -86,10 +92,14 @@ export function Post({ author, published, content }) {
                 placeholder='Deixe um comentário'
                 value={newCommentText}
                 onChange={userNewCommentChange}
+                onInvalid={userNewCommentInvalid}
+                required
             />
 
             <footer>
-                <button type='submit'>Publicar</button>
+                <button type='submit' disabled={isNewCommentEmpty}>
+                    Publicar
+                </button>
             </footer>
         </form>
 
