@@ -32,7 +32,7 @@ export function Post({ author, published, content }) {
 
     function userCreateNewComment() {
         // previnindo comportamento padrão do html
-        event.preventDefault()
+        event.preventDefault();
 
         setComments([...comments, newCommentText]);
         setNewCommentText('');
@@ -42,8 +42,14 @@ export function Post({ author, published, content }) {
         setNewCommentText(event.target.value)
     }
 
-    function deleteComment(comment) {
-        console.log(`Deletar comentário ${comment}`)
+    function deleteComment(commentToDelete) {
+        // imutabilitadade -> as variáveis não sofrem mutação, nós criamos um novo valor (um novo espaço na memória)
+        // 
+        const commentsWithoutDeletedOne = comments.filter(comment => {
+            return comment !== commentToDelete;
+        })
+
+        setComments(commentsWithoutDeletedOne);
     }
 
     return (
